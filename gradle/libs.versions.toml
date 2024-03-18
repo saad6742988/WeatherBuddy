@@ -6,8 +6,9 @@ espressoCore = "3.5.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 lifecycleRuntimeKtx = "2.7.0"
-androidApplication = "8.2.2"
-jetbrainsKotlin = "1.9.0"  #don't update
+androidApplication = "8.3.0"
+jetbrainsKotlin = "1.9.22"  #don't update
+
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
@@ -28,3 +29,4 @@ junit = { module = "junit:junit", version.ref = "junit" }
 [plugins]
 androidApplication = { id="com.android.application", version.ref="androidApplication"}
 jetbrainsKotlin = { id="org.jetbrains.kotlin.android", version.ref="jetbrainsKotlin"}
+
