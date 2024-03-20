@@ -9,7 +9,8 @@ junitVersion = "1.1.5"
 lifecycleRuntimeKtx = "2.7.0"
 androidApplication = "8.3.0"
 jetbrainsKotlin = "1.9.0"  #don't update
-hiltDependency = "2.45"
+hiltDependency = "2.49"
+lottieCompose = "4.0.0"
 
 
 [libraries]
@@ -30,6 +31,7 @@ androidx-compose-ui-test-manifest= {group="androidx.compose.ui", name="ui-test-m
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltDependency" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltDependency" }
 junit = { module = "junit:junit", version.ref = "junit" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
 
 [plugins]
 androidApplication = { id="com.android.application", version.ref="androidApplication"}
