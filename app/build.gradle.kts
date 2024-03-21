@@ -73,6 +73,9 @@ dependencies {
 
     implementation(libs.lottie.compose)
 
+    implementation (libs.androidx.constraintlayout.compose)
+
+
 }
 // Allow references to generated code
 kapt {
