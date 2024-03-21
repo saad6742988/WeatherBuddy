@@ -75,6 +75,9 @@ dependencies {
 
     implementation (libs.androidx.constraintlayout.compose)
 
+    implementation( libs.androidx.lifecycle.viewmodel.ktx)
+
+
 
 }
 // Allow references to generated code
