@@ -18,7 +18,6 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.weatherbuddy.R
-import com.example.weatherbuddy.viewModels.SplashViewModel
 import kotlinx.coroutines.delay
 
 @Composable
@@ -40,7 +39,7 @@ fun SplashScreen(changeToMain: () -> Unit)
         iterations = LottieConstants.IterateForever,
         isPlaying = true
     )
-    val splashViewModel:SplashViewModel= hiltViewModel()
+    val splashViewModel: SplashViewModel = hiltViewModel()
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,

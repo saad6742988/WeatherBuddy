@@ -1,4 +1,4 @@
-package com.example.weatherbuddy.viewModels
+package com.example.weatherbuddy.ui.splashScreen
 
 import androidx.lifecycle.ViewModel
 import com.example.weatherbuddy.repositories.WeatherRepository
