@@ -1,8 +1,6 @@
 package com.example.weatherbuddy.ui.mainScreen
 
-import android.text.Layout
 import android.util.Log
-import android.widget.GridLayout
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,7 +22,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -42,7 +39,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -50,7 +46,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -371,39 +366,39 @@ fun OtherWeatherDetails()
         ) {
             OtherDetailsCard(
                 name = "Humidity",
-                icon = Icons.Outlined.Home,
+                icon = R.drawable.humidity,
                 value = "70",
             )
             OtherDetailsCard(
-                name = "Humidity",
-                icon = Icons.Outlined.Home,
+                name = "Wind",
+                icon = R.drawable.wind,
                 value = "70",
             )
             OtherDetailsCard(
-                name = "Humidity",
-                icon = Icons.Outlined.Home,
+                name = "Condition",
+                icon = R.drawable.conditions,
                 value = "70",
             )
             OtherDetailsCard(
-                name = "Humidity",
-                icon = Icons.Outlined.Home,
+                name = "Sun Rise",
+                icon = R.drawable.sunrise,
                 value = "70",
             )
             OtherDetailsCard(
-                name = "Humidity",
-                icon = Icons.Outlined.Home,
+                name = "Sun Set",
+                icon = R.drawable.sunset,
                 value = "70",
             )
             OtherDetailsCard(
-                name = "Humidity",
-                icon = Icons.Outlined.Home,
+                name = "Sea Level",
+                icon = R.drawable.sea,
                 value = "70",
             )
         }
     }
 }
 @Composable
-fun OtherDetailsCard(name: String, icon: ImageVector, value: String)
+fun OtherDetailsCard(name: String, icon: Int, value: String)
 {
     Box(
         modifier = Modifier.padding(vertical = 10.dp)
@@ -414,10 +409,29 @@ fun OtherDetailsCard(name: String, icon: ImageVector, value: String)
             colors = CardDefaults.outlinedCardColors(containerColor = Color(160, 160, 160, 50)),
 
             modifier = Modifier
-                .size(100.dp)
+                .size(90.dp)
                 .padding(vertical = 0.dp)
         ) {
-
+            Column (
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxSize()
+            ){
+                Icon(
+                    painter = painterResource(id = icon),
+                    contentDescription = name,
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(
+                    text = value,
+                    fontWeight = FontWeight.SemiBold
+                )
+                Spacer(modifier = Modifier.height(0.dp))
+                Text(
+                    text = name,
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
     }
 }
@@ -467,6 +481,6 @@ fun CardPrev()
 {
    OtherDetailsCard(
        name = "Humidity",
-       icon = Icons.Outlined.Home,
+       icon = R.drawable.humidity,
        value = "70")
 }
