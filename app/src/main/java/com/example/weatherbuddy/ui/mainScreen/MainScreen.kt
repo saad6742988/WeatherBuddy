@@ -46,6 +46,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -422,29 +424,42 @@ fun OtherDetailsCard(name: String, icon: Int, value: String)
             shape = CardDefaults.outlinedShape,
             border = BorderStroke(1.dp, Color.White),
             colors = CardDefaults.outlinedCardColors(containerColor = Color(160, 160, 160, 50)),
-
             modifier = Modifier
                 .size(90.dp)
-                .padding(vertical = 0.dp)
         ) {
             Column (
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(vertical = 4.dp)
             ){
                 Icon(
                     painter = painterResource(id = icon),
                     contentDescription = name,
+                    modifier = Modifier.weight(1F)
                 )
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(4.dp).weight(0.1F))
                 Text(
                     text = value,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    style = TextStyle(
+                        platformStyle = PlatformTextStyle(
+                            includeFontPadding = false
+                        )
+                    ),
+                    modifier = Modifier.weight(0.5F)
                 )
-                Spacer(modifier = Modifier.height(0.dp))
                 Text(
                     text = name,
-                    fontWeight = FontWeight.Bold
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    style = TextStyle(
+                        platformStyle = PlatformTextStyle(
+                            includeFontPadding = false
+                        )
+                    ),
+                    modifier = Modifier.weight(0.5F)
                 )
             }
         }
