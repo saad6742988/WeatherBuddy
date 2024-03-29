@@ -12,6 +12,7 @@ androidApplication = "8.3.0"
 jetbrainsKotlin = "1.9.0"  #don't update
 hiltDependency = "2.49"
 lottieCompose = "4.0.0"
+retrofit = "2.11.0"
 
 
 [libraries]
@@ -35,6 +36,8 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltD
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltDependency" }
 junit = { module = "junit:junit", version.ref = "junit" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 
 [plugins]
 androidApplication = { id="com.android.application", version.ref="androidApplication"}

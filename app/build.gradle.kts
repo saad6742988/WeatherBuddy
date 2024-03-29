@@ -77,6 +77,9 @@ dependencies {
 
     implementation( libs.androidx.lifecycle.viewmodel.ktx)
 
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+
 
 
 }
