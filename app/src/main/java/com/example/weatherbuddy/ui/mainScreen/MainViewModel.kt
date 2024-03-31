@@ -1,8 +1,11 @@
 package com.example.weatherbuddy.ui.mainScreen
 
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.weatherbuddy.openWeatherService.CityData
 import com.example.weatherbuddy.repositories.WeatherRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,12 +13,15 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: WeatherRepository
 ):ViewModel() {
-    private val _selectedCity = MutableStateFlow(cities[0])
+    private val _selectedCity = MutableStateFlow(CityData("DE",52.517,13.388,"Berlin",null))
     var selectedCity = _selectedCity.asStateFlow()
     //first state whether the search is happening or not
     private val _isSearching = MutableStateFlow(false)
@@ -24,43 +30,64 @@ class MainViewModel @Inject constructor(
     //second state the text typed by the user
     private val _searchText = MutableStateFlow("")
     var searchText = _searchText.asStateFlow()
-    var abc = MutableStateFlow("")
-        private set
 
-    private val _citiesList = MutableStateFlow(cities)
-    val citiesList = searchText.combine(_citiesList){
-        text,cities ->
-        when {
-            text.isNotEmpty() -> {
-                cities.filter { country ->
-                    country.contains(text, ignoreCase = true)
+    private val _citiesList = MutableStateFlow(listOf<CityData>())
+    var citiesList = _citiesList.asStateFlow()
+//    val citiesList = searchText.combine(_citiesList){
+//            text,cities ->
+//        when {
+//            text.isNotEmpty() -> {
+//                cities.filter { country ->
+//                    country.contains(text, ignoreCase = true)
+//                }
+//            }
+//
+//            else -> {
+//                Log.d("citiesList", "return complete")
+//                cities.toList()
+//            }
+//        }
+//    }.stateIn(
+//        scope = viewModelScope,
+//        started = SharingStarted.WhileSubscribed(5000),
+//        initialValue = _citiesList.value
+//    )
+
+    private val runnable = Runnable {
+        repository.getCitiesList(_searchText.value).enqueue( object: Callback<List<CityData>>{
+            override fun onResponse(p0: Call<List<CityData>>, res: Response<List<CityData>>) {
+                Log.d("CityDataCall", "onResponse: ")
+                if (res.isSuccessful && res.body()!=null)
+                {
+                    Log.d("CityDataCall", "onResponse: Success ")
+                    _citiesList.value = res.body()!!
                 }
             }
 
-            else -> {
-                Log.d("citiesList", "return complete")
-                cities.toList()
+            override fun onFailure(p0: Call<List<CityData>>, p1: Throwable) {
+                Log.d("CityDataCall", "onFailure: ")
             }
-        }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = _citiesList.value
-    )
+
+        })
+    }
+    private val delayCitySearchCall = Handler(Looper.getMainLooper())
+
+
 
     fun onSearchTextChange(text: String) {
         _searchText.value = text
+        delayCitySearchCall.removeCallbacks(runnable)
+        delayCitySearchCall.postDelayed(runnable,1000)
     }
 
     fun onToggleSearch(active:Boolean) {
-        Log.d("SearchBar", "onToggleSearch: $abc")
         _isSearching.value = active
         if (!_isSearching.value) {
             onSearchTextChange("")
         }
     }
 
-    fun setSelectedCity(city:String)
+    fun setSelectedCity(city:CityData)
     {
         _selectedCity.value = city
     }
@@ -105,9 +132,9 @@ class DummyModel:ViewModel() {
             onSearchTextChange("")
         }
     }
-    fun setSelectedCity(city:String)
+    fun setSelectedCity(city:CityData)
     {
-        _selectedCity.value = city
+//        _selectedCity.value = city
     }
 }
 val cities = arrayOf("Berlin","Cottbus","Bonn","Munich")
