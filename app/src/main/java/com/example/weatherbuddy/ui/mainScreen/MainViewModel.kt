@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherbuddy.openWeatherService.CityData
+import com.example.weatherbuddy.openWeatherService.WeatherData
 import com.example.weatherbuddy.repositories.WeatherRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,12 +18,17 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
+import kotlin.math.ceil
+import kotlin.math.round
+
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: WeatherRepository
 ):ViewModel() {
     private val _selectedCity = MutableStateFlow(CityData("DE",52.517,13.388,"Berlin",null))
     var selectedCity = _selectedCity.asStateFlow()
+    private val _weatherData = MutableStateFlow(WeatherData())
+    val weatherData = _weatherData.asStateFlow()
     //first state whether the search is happening or not
     private val _isSearching = MutableStateFlow(false)
     val isSearching = _isSearching.asStateFlow()
@@ -33,25 +39,6 @@ class MainViewModel @Inject constructor(
 
     private val _citiesList = MutableStateFlow(listOf<CityData>())
     var citiesList = _citiesList.asStateFlow()
-//    val citiesList = searchText.combine(_citiesList){
-//            text,cities ->
-//        when {
-//            text.isNotEmpty() -> {
-//                cities.filter { country ->
-//                    country.contains(text, ignoreCase = true)
-//                }
-//            }
-//
-//            else -> {
-//                Log.d("citiesList", "return complete")
-//                cities.toList()
-//            }
-//        }
-//    }.stateIn(
-//        scope = viewModelScope,
-//        started = SharingStarted.WhileSubscribed(5000),
-//        initialValue = _citiesList.value
-//    )
 
     private val runnable = Runnable {
         repository.getCitiesList(_searchText.value).enqueue( object: Callback<List<CityData>>{
@@ -90,6 +77,22 @@ class MainViewModel @Inject constructor(
     fun setSelectedCity(city:CityData)
     {
         _selectedCity.value = city
+        repository.getWeatherData(city.lat,city.lon).enqueue(object: Callback<WeatherData>{
+            override fun onResponse(p0: Call<WeatherData>, res: Response<WeatherData>) {
+                Log.d("GetWeatherData", "onResponse: ")
+                if (res.isSuccessful)
+                {
+                    Log.d("GetWeatherData", "onResponseSuccess: ")
+                    Log.d("GetWeatherData", "${round(res.body()!!.main.temp)}   ${round(res.body()!!.main.temp_min)}   ${round(res.body()!!.main.temp_max)}")
+                    _weatherData.value = res.body()!!
+                }
+            }
+
+            override fun onFailure(p0: Call<WeatherData>, p1: Throwable) {
+                Log.d("GetWeatherData", "onFailure: ")
+            }
+
+        })
     }
 }
 
