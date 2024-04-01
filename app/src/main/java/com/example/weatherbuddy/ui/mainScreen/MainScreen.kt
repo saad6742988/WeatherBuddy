@@ -61,6 +61,8 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.weatherbuddy.R
 import com.example.weatherbuddy.openWeatherService.CityData
+import com.example.weatherbuddy.openWeatherService.WeatherData
+import kotlin.math.round
 import kotlin.reflect.KFunction1
 
 
@@ -72,6 +74,7 @@ fun MainScreen()
     val citiesList = viewModel.citiesList.collectAsState()
     val searchText = viewModel.searchText.collectAsState()
     val selectedCity = viewModel.selectedCity.collectAsState()
+    val weatherData = viewModel.weatherData.collectAsState()
     MainScreenLayout(
         searchText,
         isSearching,
@@ -79,7 +82,8 @@ fun MainScreen()
         viewModel::onSearchTextChange,
         viewModel::onToggleSearch,
         viewModel::setSelectedCity,
-        selectedCity
+        selectedCity,
+        weatherData
     )
 }
 @Composable
@@ -91,6 +95,7 @@ fun MainScreenLayout(
     onToggleSearch: KFunction1<Boolean, Unit>,
     setSelectedCity: KFunction1<CityData, Unit>,
     selectedCity: State<CityData>,
+    weatherData: State<WeatherData>,
 )
 {
     ConstraintLayout(
@@ -123,6 +128,7 @@ fun MainScreenLayout(
             end.linkTo(parent.end)
         })
         WeatherDetails(
+            weatherData,
             modifier = Modifier.constrainAs(weatherDetails){
                 top.linkTo(cityName.bottom)
                 start.linkTo(parent.start)
@@ -226,7 +232,7 @@ fun CityName(selectedCity: State<CityData>, modifier: Modifier = Modifier)
     }
 }
 @Composable
-fun WeatherDetails(modifier: Modifier = Modifier)
+fun WeatherDetails(weatherData: State<WeatherData>, modifier: Modifier = Modifier)
 {
     Column(
         modifier = modifier.padding(horizontal = 12.dp)
@@ -236,7 +242,7 @@ fun WeatherDetails(modifier: Modifier = Modifier)
                 .weight(0.5F)
                 .padding(top = 8.dp)
         ){
-            MainWeatherDetails()
+            MainWeatherDetails(weatherData)
         }
 
         Row(
@@ -256,7 +262,7 @@ fun WeatherDetails(modifier: Modifier = Modifier)
     }
 }
 @Composable
-fun MainWeatherDetails()
+fun MainWeatherDetails(weatherData: State<WeatherData>)
 {
     Row() {
         Column(
@@ -267,7 +273,9 @@ fun MainWeatherDetails()
                 .weight(0.8F)
         ){
             //Render Lottie Animations for weather
-            WeatherConditionAnimation()
+            if (weatherData.value.weather.isNotEmpty()){
+            WeatherConditionAnimation(weatherData.value.weather[0].main)
+            }
         }
         Column(
             modifier = Modifier
@@ -275,12 +283,16 @@ fun MainWeatherDetails()
                 .weight(1F)
         ){
             //Weather temperature details
-            WeatherTemperatureDetails()
+            WeatherTemperatureDetails(
+                weatherData.value.main.temp,
+                weatherData.value.main.temp_max,
+                weatherData.value.main.temp_min,
+            )
         }
     }
 }
 @Composable
-fun WeatherConditionAnimation()
+fun WeatherConditionAnimation(condition: String)
 {
     val preloaderWeatherAnimComposition by rememberLottieComposition(
         LottieCompositionSpec.RawRes(
@@ -299,13 +311,13 @@ fun WeatherConditionAnimation()
         modifier = Modifier.size(150.dp)
     )
     Text(
-        text = "Sunny",
+        text = condition,
         fontSize = 24.sp,
         fontWeight = FontWeight.ExtraBold
     )
 }
 @Composable
-fun WeatherTemperatureDetails()
+fun WeatherTemperatureDetails(temp: Double, tempMax: Double, tempMin: Double)
 {
     Column(
         modifier = Modifier
@@ -322,7 +334,7 @@ fun WeatherTemperatureDetails()
         ) {
             //Main Temperature Data
             Text(
-                text = "31"+"",
+                text = "${round(temp).toInt()}",
                 fontSize = 64.sp,
                 fontWeight = FontWeight.Bold,
 //                textAlign = TextAlign.End,
@@ -346,12 +358,12 @@ fun WeatherTemperatureDetails()
             // Min Max Temperature Data
             Column {
                 Text(
-                    text = "Min: "+"29"+"°C",
+                    text = "Min: "+"${round(tempMin).toInt()}"+"°C",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold
                 )
                 Text(
-                    text = "Max: "+"29"+"°C",
+                    text = "Max: "+"${round(tempMax).toInt()}"+"°C",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -502,7 +514,8 @@ fun MainScreenPrev()
         viewModel::onSearchTextChange,
         viewModel::onToggleSearch,
         viewModel::setSelectedCity,
-        mutableStateOf(CityData("DE",52.517,13.388,"Berlin",null))
+        mutableStateOf(CityData("DE",52.517,13.388,"Berlin",null)),
+        mutableStateOf(WeatherData())
     )
 }
 
