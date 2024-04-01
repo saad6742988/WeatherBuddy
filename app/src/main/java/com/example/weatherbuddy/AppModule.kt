@@ -31,7 +31,7 @@ class AppModule {
     @Named("WeatherData")
     fun provideRetrofitWeather(gson: GsonConverterFactory): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://api.openweathermap.org/geo/1.0/")
+            .baseUrl("https://api.openweathermap.org/data/2.5/")
             .addConverterFactory(gson)
             .build()
     }
