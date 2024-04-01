@@ -10,6 +10,9 @@ import javax.inject.Inject
 class WeatherRepository @Inject constructor(
     private val openWeatherGeoCodingService: OpenWeatherGeoCodingService
 ){
+    fun getCitiesList(searchText:String): Call<List<CityData>> {
+        return openWeatherGeoCodingService.getCitiesList(searchText)
+    }
     fun test():String
     {
         return "Test Success"
