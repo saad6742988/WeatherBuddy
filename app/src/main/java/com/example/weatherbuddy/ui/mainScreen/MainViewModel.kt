@@ -83,7 +83,7 @@ class MainViewModel @Inject constructor(
                 if (res.isSuccessful)
                 {
                     Log.d("GetWeatherData", "onResponseSuccess: ")
-                    Log.d("GetWeatherData", "${round(res.body()!!.main.temp)}   ${round(res.body()!!.main.temp_min)}   ${round(res.body()!!.main.temp_max)}")
+                    Log.d("GetWeatherData", "${res.body()!!.weather[0].main} ")
                     _weatherData.value = res.body()!!
                 }
             }
