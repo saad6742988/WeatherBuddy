@@ -294,9 +294,19 @@ fun MainWeatherDetails(weatherData: State<WeatherData>)
 @Composable
 fun WeatherConditionAnimation(condition: String)
 {
+    val weather_anim = when(condition){
+        "Thunderstorm"-> R.raw.thunderstrom
+        "Drizzle"-> R.raw.rainy
+        "Rain"-> R.raw.rainy
+        "Snow"-> R.raw.snow
+        "Atmosphere"-> R.raw.mist
+        "Clear"-> R.raw.clear_sun
+        "Clouds"-> R.raw.splash_animation
+        else->R.raw.clear_sun
+    }
     val preloaderWeatherAnimComposition by rememberLottieComposition(
         LottieCompositionSpec.RawRes(
-            R.raw.splash_animation
+            weather_anim
         )
     )
 
