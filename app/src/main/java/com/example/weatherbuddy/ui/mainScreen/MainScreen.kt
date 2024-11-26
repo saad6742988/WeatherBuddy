@@ -181,7 +181,7 @@ fun SearchBar(
             LazyColumn {
                 items(citiesList.value) { city ->
                     Text(
-                        text = "${city.name},${city.state},${city.country}",
+                        text = "${city.name}${city.state?.let {",${city.state}"}?:""},${city.country}",
                         fontSize = 18.sp,
                         modifier = Modifier
                             .fillMaxWidth()
